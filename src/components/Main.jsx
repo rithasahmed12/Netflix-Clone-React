@@ -15,7 +15,6 @@ const Main = () => {
     })
   }, [])
 
-  console.log('koi:',movie);
  
 
   const truncateString = (str,num) => {
