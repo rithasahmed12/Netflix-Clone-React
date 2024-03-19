@@ -7,11 +7,13 @@ import Signup from "./pages/Signup";
 import Account from "./pages/Account";
 import ProtectedRoute from "./components/ProtectedRoute";
 
+
 function App() {
   return (
     <>
     <AuthContextProvider>
     <Navbar />
+
     <Routes>
       <Route path='/' element={<Home/>} />
       <Route path='/login' element={<Login/>} />

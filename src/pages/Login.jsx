@@ -1,6 +1,8 @@
-import React,{useState} from 'react'
+import React,{useRef, useState} from 'react'
 import { Link , useNavigate } from 'react-router-dom'
 import { UserAuth } from '../context/AuthContext'
+import { CheckValidData } from '../Validation/validation'
+
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -8,13 +10,22 @@ const Login = () => {
     const [error, setError] = useState('')
     const {user, logIn} = UserAuth()
     const navigate = useNavigate()
+    const emailRef = useRef(null)
+    const passwordRef = useRef(null)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setError('')
+        const message = CheckValidData(emailRef.current.value,passwordRef.current.value)
         try {
-            await logIn(email, password)
-            navigate('/')
+            if(message === null){
+                await logIn(email, password)
+                navigate('/')
+            }else{
+                setError(message);
+            }
+            
+           
         } catch (error) {
             console.log(error);
             setError(error.message)
@@ -31,9 +42,9 @@ const Login = () => {
                     <h1 className='text-3l font-bold'>Sign In</h1>
                     {error ? <p className='p-3 bg-red-400'>{error}</p> : null}
                     <form onSubmit={handleSubmit} className='w-full flex flex-col py-4'>
-                        <input onChange={(e)=> setEmail(e.target.value)} className='p-3 my-2 bg-gray-700 rounded' type="email" placeholder='Email' autoComplete=''email />
-                        <input onChange={(e)=> setPassword(e.target.value)} className='p-3 my-2 bg-gray-700 rounded' type="password" placeholder='Password' autoComplete='current-password' />
-                        <button className='bg-red-600 py-3 my-6 rounded font-bold'>Sign up</button>
+                        <input ref={emailRef} onChange={(e)=> setEmail(e.target.value)} className='p-3 my-2 bg-gray-700 rounded' type="email" placeholder='Email' autoComplete=''email />
+                        <input ref={passwordRef} onChange={(e)=> setPassword(e.target.value)} className='p-3 my-2 bg-gray-700 rounded' type="password" placeholder='Password' autoComplete='current-password' />
+                        <button className='bg-red-600 py-3 my-6 rounded font-bold'>Sign in</button>
                         <div className='flex justify-between items-center text-sm text-gray-600'>
                             <p><input className='mr-2' type="checkbox" />Remember me</p>
                             <p>Need Help?</p>
